@@ -4,12 +4,16 @@ import ai.onnxruntime.OrtEnvironment
 import ai.onnxruntime.OrtSession
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import org.jetbrains.kotlinx.multik.api.mk
+import org.jetbrains.kotlinx.multik.api.ndarray
 import org.opencv.android.Utils
 import org.opencv.core.CvType
 import org.opencv.core.Mat
 import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
 import java.io.InputStream
+import org.jetbrains.kotlinx.multik.ndarray.operations.*
+
 internal data class LicensePlateResult(
     var outputBitmap: Bitmap, var outputBox: Array<FloatArray>
 )
@@ -34,7 +38,9 @@ internal class LicensePlateDetector {
             }
         }
         val transposedMatrix = transposeMatrix(matrix)
-        val s = 1
+        val a = mk.ndarray(mk[1, 2, 3])
+
+
         val copiedImage = FloatArray((newmat.total() * newmat.channels()).toInt()) { 0f }
         newmat.get(0, 0, copiedImage)
         val flattenImage = prepareImage(copiedImage)
